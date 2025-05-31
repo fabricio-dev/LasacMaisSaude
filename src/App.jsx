@@ -1,29 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddTasks from "./components/AddTasks";
 import Tasks from "./components/Tasks";
 import Buscar from "./components/Buscar";
 import { v4 } from "uuid";
 function App() {
-  const [tasks, setTask] = useState([
-    {
-      id: 1,
-      title: "estudar programacaso",
-      description: "teste de programacao",
-      isLoss: false,
-    },
-    {
-      id: 2,
-      title: "lasac App",
-      description: "teste de programacao",
-      isLoss: false,
-    },
-    {
-      id: 3,
-      title: "App",
-      description: "teste de programacao",
-      isLoss: false,
-    },
-  ]);
+  const [tasks, setTask] = useState(
+    JSON.parse(localStorage.getItem("tasks")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    //chamnar a API para buscar as tarefas
+
+    const fetchTasks = async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10",
+        {
+          method: "GET",
+        }
+      );
+      const data = await response.json();
+      setTask(data);
+    };
+
+    // se quiser pegar da API
+    fetchTasks();
+  }, []);
+
   function onTaskClick(taskId) {
     const newTask = tasks.map((task) => {
       if (task.id == taskId) {
