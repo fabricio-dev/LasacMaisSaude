@@ -27,7 +27,7 @@ function App() {
     };
 
     // se quiser pegar da API
-    fetchTasks();
+    //fetchTasks();
   }, []);
 
   function onTaskClick(taskId) {
